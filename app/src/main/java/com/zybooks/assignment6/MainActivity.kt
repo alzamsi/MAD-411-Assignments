@@ -25,7 +25,7 @@ class MainActivity : AppCompatActivity() {
             if (name.isNotEmpty()){
                 result.text = "Hello: $name"
             }else{
-                result.text = "Please Enter Your Name"
+                result.text = "Please Enter Your Name!!"
             }
         }
     }

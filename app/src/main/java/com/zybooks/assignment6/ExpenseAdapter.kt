@@ -8,35 +8,37 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.zybooks.assignment6.Expense
 import com.zybooks.assignment6.R
-import kotlin.io.path.name
 
-class ExpenseAdapter(private val expenses: MutableList<Expense>) :
-    RecyclerView.Adapter<ExpenseAdapter.ExpenseViewHolder>() {
+class ExpenseAdapter(
+    private val expenses: List<Expense>,
+    private val onDeleteClickListener: (Expense) -> Unit
+) : RecyclerView.Adapter<ExpenseAdapter.ExpenseViewHolder>() {
 
-    class ExpenseViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val nameTextView: TextView = itemView.findViewById(R.id.expenseRecycleView)
-        val amountTextView: TextView = itemView.findViewById(R.id.amountTextView)
-        val deleteButton: Button = itemView.findViewById(R.id.deleteButton)
+    inner class ExpenseViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        private val nameTextView: TextView = itemView.findViewById(R.id.expenseNameTextView)
+        private val amountTextView: TextView = itemView.findViewById(R.id.amountTextView)
+        private val dateTextView: TextView = itemView.findViewById(R.id.dateEditTextDate)
+        private val deleteButton: Button = itemView.findViewById(R.id.deleteButton)
+
+        fun bind(expense: Expense) {
+            nameTextView.text = expense.name
+            amountTextView.text = "$${expense.amount}"
+            dateTextView.text = expense.date
+            deleteButton.setOnClickListener {
+                onDeleteClickListener(expense)
+            }
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ExpenseViewHolder {
-        val itemView = LayoutInflater.from(parent.context)
+        val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.expense_item, parent, false)
-        return ExpenseViewHolder(itemView)
+        return ExpenseViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: ExpenseViewHolder, position: Int) {
-        val currentExpense = expenses[position]
-        holder.nameTextView.text = currentExpense.name
-        holder.amountTextView.text = currentExpense.amount.toString()
-
-        holder.deleteButton.setOnClickListener {
-            expenses.removeAt(position)
-            notifyItemRemoved(position)
-        }
-
+        holder.bind(expenses[position])
     }
 
-
-    override fun getItemCount() = expenses.size
+    override fun getItemCount(): Int = expenses.size
 }

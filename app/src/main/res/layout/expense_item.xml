@@ -1,40 +1,37 @@
-<?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:orientation="horizontal"
+    android:padding="8dp">
 
     <TextView
         android:id="@+id/expenseNameTextView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_weight="1"
         android:text="Expense Name"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/amountTextView"
-        android:layout_marginEnd="8dp"
-        android:paddingStart="16dp"
-        android:paddingTop="8dp"/>
+        android:textSize="16sp"/>
 
     <TextView
         android:id="@+id/amountTextView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_weight="1"
         android:text="Amount"
-        app:layout_constraintStart_toEndOf="@+id/expenseNameTextView"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/deleteButton"
-        android:paddingTop="8dp"
-        android:paddingEnd="16dp"/>
+        android:textSize="16sp"/>
+
+    <TextView
+        android:id="@+id/dateTextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="Date"
+        android:textSize="16sp"/>
 
     <Button
         android:id="@+id/deleteButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Delete"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:paddingTop="8dp"
-        android:paddingEnd="16dp"/>
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+        android:text="Delete"/>
+</LinearLayout>

@@ -1,5 +1,6 @@
 package com.zybooks.assignment6
 
+import android.app.DatePickerDialog
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
@@ -9,49 +10,77 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.yourappname.ExpenseAdapter
+import java.util.Calendar
 
 class MainActivity : AppCompatActivity() {
-    private val expenseList = mutableListOf<Expense>()
-    private lateinit var expenseAdapter: ExpenseAdapter
+
+    private val expenses = mutableListOf<Expense>()
+    private lateinit var adapter: ExpenseAdapter
+    private lateinit var dateEditText: EditText
+    private val calendar = Calendar.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContentView(R.layout.activity_main)
 
-        val expenseEditText = findViewById<EditText>(R.id.expenseEditTextText)
-        val amountEditText = findViewById<EditText>(R.id.amountEditTextNumberDecimal)
-        val dateEditText = findViewById<EditText>(R.id.dateEditTextDate)
+        // Initialize views
+        val expenseNameEditText = findViewById<EditText>(R.id.expenseNameEditText)
+        val amountEditText = findViewById<EditText>(R.id.amountEditText)
+        dateEditText = findViewById<EditText>(R.id.dateEditText)
         val addExpenseButton = findViewById<Button>(R.id.addExpenseButton)
-        val expenseRecyclerView = findViewById<RecyclerView>(R.id.expenseRecycleView)
+        val recyclerView = findViewById<RecyclerView>(R.id.expensesRecyclerView)
 
-        expenseAdapter = ExpenseAdapter(expenseList) { expense ->
-            val index = expenseList.indexOf(expense)
-            if (index != -1) {
-                expenseList.removeAt(index)
-                expenseAdapter.notifyItemRemoved(index)
-            }
+        // Initialize RecyclerView
+        recyclerView.layoutManager = LinearLayoutManager(this)
+        adapter = ExpenseAdapter(expenses) { expense: Expense ->
+            expenses.remove(expense)
+            adapter.notifyDataSetChanged()
         }
-        expenseRecyclerView.layoutManager = LinearLayoutManager(this)
-        expenseRecyclerView.adapter = expenseAdapter
+        recyclerView.adapter = adapter
 
+        // Set up Date EditText
+        dateEditText.setOnClickListener {
+            showDatePickerDialog()
+        }
+
+        // Set up Add Expense Button
         addExpenseButton.setOnClickListener {
-            val expenseName = expenseEditText.text.toString()
-            val amount = amountEditText.text.toString().toDoubleOrNull() ?: 0.0
-            val date = dateEditText.text.toString()
+            val name = expenseNameEditText.text.toString()
+            val amount = amountEditText.text.toString().toDoubleOrNull()
+            val date = if (dateEditText.text.isNotBlank()) dateEditText.text.toString() else null
 
-            if (expenseName.isNotEmpty() && amount > 0.0 && date.isNotEmpty()) {
-                expenseList.add(Expense(expenseName, amount, date))
-                expenseAdapter.notifyItemInserted(expenseList.size - 1)
+            if (name.isNotEmpty() && amount != null) {
+                val expense = Expense(name, amount, date)
+                expenses.add(expense)
+                adapter.notifyDataSetChanged()
 
-                Toast.makeText(this, "Expense Added: $expenseName, $amount on $date", Toast.LENGTH_LONG).show()
-
-                expenseEditText.text.clear()
+                // Clear input fields
+                expenseNameEditText.text.clear()
                 amountEditText.text.clear()
                 dateEditText.text.clear()
             } else {
-                Toast.makeText(this, "Please fill all fields with valid values", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, "Please enter valid expense details", Toast.LENGTH_SHORT).show()
             }
         }
+    }
+
+
+    //used an outside source to help with the date picker
+    private fun showDatePickerDialog() {
+        val year = calendar.get(Calendar.YEAR)
+        val month = calendar.get(Calendar.MONTH)
+        val day = calendar.get(Calendar.DAY_OF_MONTH)
+
+        val datePickerDialog = DatePickerDialog(
+            this,
+            { _, selectedYear, selectedMonth, selectedDay ->
+                val formattedDate = String.format("%02d/%02d/%04d", selectedMonth + 1, selectedDay, selectedYear)
+                dateEditText.setText(formattedDate)
+            },
+            year,
+            month,
+            day
+        )
+        datePickerDialog.show()
     }
 }

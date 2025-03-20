@@ -10,23 +10,21 @@ import com.zybooks.assignment6.Expense
 import com.zybooks.assignment6.R
 
 class ExpenseAdapter(
-    private val expenses: List<Expense>,
+    private val expenses: MutableList<Expense>,
     private val onDeleteClickListener: (Expense) -> Unit
 ) : RecyclerView.Adapter<ExpenseAdapter.ExpenseViewHolder>() {
 
     inner class ExpenseViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val nameTextView: TextView = itemView.findViewById(R.id.expenseNameTextView)
+        private val expenseNameTextView: TextView = itemView.findViewById(R.id.expenseNameTextView)
         private val amountTextView: TextView = itemView.findViewById(R.id.amountTextView)
-        private val dateTextView: TextView = itemView.findViewById(R.id.dateEditTextDate)
+        private val dateTextView: TextView = itemView.findViewById(R.id.dateTextView)
         private val deleteButton: Button = itemView.findViewById(R.id.deleteButton)
 
         fun bind(expense: Expense) {
-            nameTextView.text = expense.name
+            expenseNameTextView.text = expense.name
             amountTextView.text = "$${expense.amount}"
-            dateTextView.text = expense.date
-            deleteButton.setOnClickListener {
-                onDeleteClickListener(expense)
-            }
+            dateTextView.text = expense.date ?: "No Date"
+            deleteButton.setOnClickListener { onDeleteClickListener(expense) }
         }
     }
 

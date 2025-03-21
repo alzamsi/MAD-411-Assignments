@@ -4,7 +4,10 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="16dp">
-
+    <FrameLayout
+        android:id="@+id/headerFragmentContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
     <EditText
         android:id="@+id/expenseNameEditText"
         android:layout_width="match_parent"
@@ -58,4 +61,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Add Expense"/>
+
+    <FrameLayout
+        android:id="@+id/footerFragmentContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
 </LinearLayout>

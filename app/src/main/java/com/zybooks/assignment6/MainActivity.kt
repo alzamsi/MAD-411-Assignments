@@ -22,7 +22,11 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContentView(R.layout.activity_main)
+        loadFragment(HeaderFragment(), R.id.headerFragmentContainer)
+        footerFragment = FooterFragment()
+        loadFragment(footerFragment, R.id.footerFragmentContainer)
 
         // Initialize views
         val expenseNameEditText = findViewById<EditText>(R.id.expenseNameEditText)
@@ -54,6 +58,7 @@ class MainActivity : AppCompatActivity() {
                 val expense = Expense(name, amount, date)
                 expenses.add(expense)
                 adapter.notifyDataSetChanged()
+                footerFragment.updateTotalAmount(amount)
 
                 // Clear input fields
                 expenseNameEditText.text.clear()

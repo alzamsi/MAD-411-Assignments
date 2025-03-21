@@ -48,6 +48,8 @@
         android:enabled="true"
         android:layout_marginBottom="16dp"/>
 
+
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/expensesRecyclerView"
         android:layout_width="match_parent"

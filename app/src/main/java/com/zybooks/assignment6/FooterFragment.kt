@@ -7,6 +7,8 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 
+
+
 class FooterFragment : Fragment() {
     private lateinit var totalExpensesTextView: TextView
 

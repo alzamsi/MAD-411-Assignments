@@ -16,7 +16,7 @@ class FooterFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_footer, container, false)
+        val view = inflater.inflate(R.layout.footer_fragment, container, false)
         totalExpensesTextView = view.findViewById(R.id.totalExpensesTextView)
         return view
     }

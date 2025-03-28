@@ -6,11 +6,10 @@ import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.yourappname.ExpenseAdapter
 import java.util.Calendar
 
 class MainActivity : AppCompatActivity() {
@@ -18,14 +17,14 @@ class MainActivity : AppCompatActivity() {
     private val expenses = mutableListOf<Expense>()
     private lateinit var adapter: ExpenseAdapter
     private lateinit var dateEditText: EditText
+    private lateinit var footerFragment: FooterFragment
     private val calendar = Calendar.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-
-
         setContentView(R.layout.activity_main)
+
+        // Load Header and Footer Fragments
         loadFragment(HeaderFragment(), R.id.headerFragmentContainer)
         footerFragment = FooterFragment()
         loadFragment(footerFragment, R.id.footerFragmentContainer)
@@ -42,6 +41,7 @@ class MainActivity : AppCompatActivity() {
         adapter = ExpenseAdapter(expenses) { expense: Expense ->
             expenses.remove(expense)
             adapter.notifyDataSetChanged()
+            updateFooterTotal()
         }
         recyclerView.adapter = adapter
 
@@ -60,7 +60,7 @@ class MainActivity : AppCompatActivity() {
                 val expense = Expense(name, amount, date)
                 expenses.add(expense)
                 adapter.notifyDataSetChanged()
-                footerFragment.updateTotalAmount(amount)
+                updateFooterTotal()
 
                 // Clear input fields
                 expenseNameEditText.text.clear()
@@ -70,36 +70,19 @@ class MainActivity : AppCompatActivity() {
                 Toast.makeText(this, "Please enter valid expense details", Toast.LENGTH_SHORT).show()
             }
         }
-
-
-
     }
 
-    override fun onStart() {
-        super.onStart()
-        Log.d("ActivityLifecycle", "onStart called")
+    private fun updateFooterTotal() {
+        val total = expenses.sumOf { it.amount }
+        footerFragment.updateTotalExpenses(total)
     }
 
-    override fun onResume() {
-        super.onResume()
-        Log.d("ActivityLifecycle", "onResume called")
+    private fun loadFragment(fragment: Fragment, containerId: Int) {
+        supportFragmentManager.beginTransaction()
+            .replace(containerId, fragment)
+            .commit()
     }
 
-    override fun onPause() {
-        super.onPause()
-        Log.d("ActivityLifecycle", "onPause called")
-    }
-
-    override fun onStop() {
-        super.onStop()
-        Log.d("ActivityLifecycle", "onStop called")
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        Log.d("ActivityLifecycle", "onDestroy called")
-    }
-    //used an outside source to help with the date picker
     private fun showDatePickerDialog() {
         val year = calendar.get(Calendar.YEAR)
         val month = calendar.get(Calendar.MONTH)
